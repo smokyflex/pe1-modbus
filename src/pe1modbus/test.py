@@ -1,8 +1,32 @@
-from pymodbus.client import ModbusTcpClient
+#from pymodbus.client import ModbusTcpClient
+import logging
 
-client = ModbusTcpClient('192.168.0.7')
-client.connect()
-client.write_coil(1, True)
-result = client.read_coils(1,1)
-print(result.bits[0])
+from pyModbusTCP.client import ModbusClient
+
+from register import InputRegisters
+from modbusclient import LTModbusClient, RegisterResponse
+
+logging.basicConfig(level=logging.DEBUG)
+logging.getLogger("pymodbus").setLevel(logging.DEBUG)
+
+# TCP auto connect on first modbus request
+client = LTModbusClient(
+    host="192.168.0.222", 
+    port=502, 
+    unit_id=2
+)
+
+print(client)
+
+status = client.open()
+
+if status:
+
+    register_response: RegisterResponse = client.get_register_value(InputRegisters.BUFFER_TEMPERATURE_BOTTOM)
+
+    print(vars(register_response))
+
+
 client.close()
+
+exit()
