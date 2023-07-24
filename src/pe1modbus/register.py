@@ -19,7 +19,7 @@ class InputRegisters(Enum):
     TOTAL_PELLETS_CONSUMPTION =                     (30084, 30001, 10,   1,     "t",    "TOTAL_PELLETS_CONSUMPTION",                    "Pelletverbrauch Gesamt")
     REMAINING_HOURS_UNTIL_ASH_REMOVAL =             (30087, 30001, 1,    0,     "h",    "REMAINING_HOURS_UNTIL_ASH_REMOVAL",            "Verbleibende Heizstunden bis zur Asche entleeren Warnung")
     COUNT_CLEANING_CYCLES =                         (30102, 30001, 1,    0,     "#",    "COUNT_CLEANING_CYCLES",                        "Anzahl der Reinigungen")
-    MINUTES_UNTIL_NEXT_CLENAING_CYLCLE =            (30103, 30001, 1,    0,     "min",  "MINUTES_UNTIL_NEXT_CLENAING_CYLCLE",           "Zeit bis zur nächsten Reinigung")
+    MINUTES_UNTIL_NEXT_CLEANING_CYLCLE =            (30103, 30001, 1,    0,     "min",  "MINUTES_UNTIL_NEXT_CLEANING_CYLCLE",           "Zeit bis zur nächsten Reinigung")
     RETURN_FLOW_TEMPERATURE_AT_CIRCULATION_LINE =   (30712, 30001, 2,    0,     "°C",   "RETURN_FLOW_TEMPERATURE_AT_CIRCULATION_LINE",  "Rücklauftemperatur an der Zirkulations Leitung")
     OUTSIDE_TEMPERATURE =                           (31001, 30001, 2,    0,     "°C",   "OUTSIDE_TEMPERATURE",                          "Außentemperatur")
     HEATING_FLOW_TEMPERATURE_ACTUAL =               (31031, 30001, 2,    0,     "°C",   "HEATING_FLOW_TEMPERATURE_ACTUAL",              "HK1 - Vorlauf-Isttemperatur")
