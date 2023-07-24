@@ -22,9 +22,12 @@ status = client.open()
 
 if status:
 
-    register_response: RegisterResponse = client.get_register_value(InputRegisters.BUFFER_TEMPERATURE_BOTTOM)
+    for ir in InputRegisters:
+        
+        #print(ir.value)
+        register_response: RegisterResponse = client.get_register_value(ir)
 
-    print(vars(register_response))
+        print(f"{register_response.name}: {register_response.value} {register_response.unit}")
 
 
 client.close()

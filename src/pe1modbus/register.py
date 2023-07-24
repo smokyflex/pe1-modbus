@@ -2,13 +2,13 @@ from enum import Enum
 
 class InputRegisters(Enum):
                                                     # adr   offset scale dec    unit    name                                            desc
-    PE1_TEMPERATURE =                               (30001, 30001, 2,    0,     "°C",   "PE1_TEMPERATURE",                              "Kesseltemperatur")
+    HEATER_TEMPERATURE =                            (30001, 30001, 2,    0,     "°C",   "HEATER_TEMPERATURE",                              "Kesseltemperatur")
     SENSOR_1 =                                      (30008, 30001, 2,    0,     "°C",   "SENSOR_1",                                     "Fühler 1")
     RETURN_FLOW_SENSOR =                            (30010, 30001, 2,    0,     "°C",   "RETURN_FLOW_SENSOR",                           "Fühler 1")
     OPERATING_HOURS =                               (30021, 30001, 1,    0,     "h",    "OPERATING_HOURS",                              "Betriebsstunden")
     FILL_LEVEL_PELLETS_CONTAINER =                  (30022, 30001, 201,  1,     "%",    "FILL_LEVEL_PELLETS_CONTAINER",                 "Füllstand im Pelletsbehälter")
-    BOILER_STARTS_COUNT =                           (30023, 30001, 1,    0,     "#",    "BOILER_STARTS_COUNT",                          "Anzahl der Brennerstarts")
-    CALCULATED_BOILER_TARGET_TEMPERATURE =          (30028, 30001, 1,    0,     "h",    "CALCULATED_BOILER_TARGET_TEMPERATURE",         "Errechnete Kesselsolltemperatur")
+    HEATER_STARTS_COUNT =                           (30023, 30001, 1,    0,     "#",    "HEATER_STARTS_COUNT",                          "Anzahl der Brennerstarts")
+    CALCULATED_HEATER_TARGET_TEMPERATURE =          (30028, 30001, 2,    0,     "°C",   "CALCULATED_HEATER_TARGET_TEMPERATURE",         "Errechnete Kesselsolltemperatur")
     RETURN_FLOW_CONTROL =                           (30037, 30001, 1,    0,     "%",    "RETURN_FLOW_CONTROL",                          "Rücklaufpumpen Ansteuerung")
     HOURS_SINCE_LAST_MAINTENANCE =                  (30056, 30001, 1,    0,     "h",    "HOURS_SINCE_LAST_MAINTENANCE",                 "Stunden seit letzter Wartung")
     HOURS_OF_PELLETS_OPERATION =                    (30063, 30001, 1,    0,     "h",    "HOURS_OF_PELLETS_OPERATION",                   "Stunden im Pelletsbetrieb")
