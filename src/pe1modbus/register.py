@@ -1,36 +1,76 @@
 from enum import Enum
 
-class InputRegisters(Enum):
-                                                    # adr   offset scale dec    unit    name                                            desc
-    HEATER_TEMPERATURE =                            (30001, 30001, 2,    0,     "°C",   "HEATER_TEMPERATURE",                              "Kesseltemperatur")
-    SENSOR_1 =                                      (30008, 30001, 2,    0,     "°C",   "SENSOR_1",                                     "Fühler 1")
-    RETURN_FLOW_SENSOR =                            (30010, 30001, 2,    0,     "°C",   "RETURN_FLOW_SENSOR",                           "Fühler 1")
-    OPERATING_HOURS =                               (30021, 30001, 1,    0,     "h",    "OPERATING_HOURS",                              "Betriebsstunden")
-    FILL_LEVEL_PELLETS_CONTAINER =                  (30022, 30001, 201,  1,     "%",    "FILL_LEVEL_PELLETS_CONTAINER",                 "Füllstand im Pelletsbehälter")
-    HEATER_STARTS_COUNT =                           (30023, 30001, 1,    0,     "#",    "HEATER_STARTS_COUNT",                          "Anzahl der Brennerstarts")
-    CALCULATED_HEATER_TARGET_TEMPERATURE =          (30028, 30001, 2,    0,     "°C",   "CALCULATED_HEATER_TARGET_TEMPERATURE",         "Errechnete Kesselsolltemperatur")
-    RETURN_FLOW_CONTROL =                           (30037, 30001, 1,    0,     "%",    "RETURN_FLOW_CONTROL",                          "Rücklaufpumpen Ansteuerung")
-    HOURS_SINCE_LAST_MAINTENANCE =                  (30056, 30001, 1,    0,     "h",    "HOURS_SINCE_LAST_MAINTENANCE",                 "Stunden seit letzter Wartung")
-    HOURS_OF_PELLETS_OPERATION =                    (30063, 30001, 1,    0,     "h",    "HOURS_OF_PELLETS_OPERATION",                   "Stunden im Pelletsbetrieb")
-    HOURS_OF_HEATING =                              (30064, 30001, 1,    0,     "h",    "HOURS_OF_HEATING",                             "Stunden im Heizen")
-    CALCULATED_TARGET_RETURN_FLOW =                 (30067, 30001, 2,    0,     "°C",   "CALCULATED_TARGET_RETURN_FLOW",                "Rücklauf Soll errechnet")
-    KG_COUNT =                                      (30082, 30001, 1,    0,     "kg",   "KG_COUNT",                                     "Resetierbarer kg-Zähler")
-    TONS_COUNT =                                    (30083, 30001, 1,    0,     "t",    "TONS_COUNT",                                   "Resetierbarer t-Zähler")
-    TOTAL_PELLETS_CONSUMPTION =                     (30084, 30001, 10,   1,     "t",    "TOTAL_PELLETS_CONSUMPTION",                    "Pelletverbrauch Gesamt")
-    REMAINING_HOURS_UNTIL_ASH_REMOVAL =             (30087, 30001, 1,    0,     "h",    "REMAINING_HOURS_UNTIL_ASH_REMOVAL",            "Verbleibende Heizstunden bis zur Asche entleeren Warnung")
-    COUNT_CLEANING_CYCLES =                         (30102, 30001, 1,    0,     "#",    "COUNT_CLEANING_CYCLES",                        "Anzahl der Reinigungen")
-    MINUTES_UNTIL_NEXT_CLEANING_CYLCLE =            (30103, 30001, 1,    0,     "min",  "MINUTES_UNTIL_NEXT_CLEANING_CYLCLE",           "Zeit bis zur nächsten Reinigung")
-    RETURN_FLOW_TEMPERATURE_AT_CIRCULATION_LINE =   (30712, 30001, 2,    0,     "°C",   "RETURN_FLOW_TEMPERATURE_AT_CIRCULATION_LINE",  "Rücklauftemperatur an der Zirkulations Leitung")
-    OUTSIDE_TEMPERATURE =                           (31001, 30001, 2,    0,     "°C",   "OUTSIDE_TEMPERATURE",                          "Außentemperatur")
-    HEATING_FLOW_TEMPERATURE_ACTUAL =               (31031, 30001, 2,    0,     "°C",   "HEATING_FLOW_TEMPERATURE_ACTUAL",              "HK1 - Vorlauf-Isttemperatur")
-    HEATING_FLOW_TEMPERATURE_TARGET =               (31032, 30001, 2,    0,     "°C",   "HEATING_FLOW_TEMPERATURE_TARGET",              "HK1 - Vorlauf-Solltemperatur")
-    ROOM_TEMPERATURE =                              (31033, 30001, 2,    0,     "°C",   "ROOM_TEMPERATURE",                             "HK1 - Raumtemperatur")
-    BOILER_TEMPERATURE_TOP =                        (31631, 30001, 2,    0,     "°C",   "BOILER_TEMPERATURE_TOP",                       "Boiler 1 - Boilertemperatur oben")
-    BUFFER_TEMPERATURE_TOP =                        (32001, 30001, 2,    0,     "°C",   "BUFFER_TEMPERATURE_TOP",                       "Puffertemperatur oben")
-    #BUFFER_TEMPERATURE_CENTER =                     (32002, 30001, 2,    0,     "°C",   "BUFFER_TEMPERATURE_CENTER",                    "Puffertemperatur Mitte")
-    BUFFER_TEMPERATURE_BOTTOM =                     (32003, 30001, 2,    0,     "°C",   "BUFFER_TEMPERATURE_BOTTOM",                    "Puffertemperatur unten")
-    BUFFER_CHARGING_STATE =                         (32007, 30001, 1,    0,     "%",    "BUFFER_CHARGING_STATE",                        "Pufferladezustand")
 
+class SystemStatus(Enum):
+    CONTINUOUS_LOAD =      0 # Dauerlast
+    DOMESTIC_HOT_WATER =   1 # Brauchwasser
+    AUTOMATIC =            2 # Automatik
+    FIREWOOD_OPERATION =   3 # Scheitholzbetr
+    CLEANING =             4 # Reinigen
+    OFF =                  5 # Ausgeschaltet
+    EXTRA_HEATING =        6 # Extraheizen
+    CHIMNEY_SWEEP =        7 # Kaminkehrer
+    CLEANING2 =            8 # Reinigen2
+
+class FurnaceStatus(Enum):
+    FAULT =           0  # STÖRUNG      
+    FURNACAE_OFF =    1  # Kessel_Aus
+    HEATING_UP =      2  # Anheizen
+    HEATING =         3  # Heizen
+    SLUMBER =         4  # Feuererhaltung
+    FIRE_OFF =        5  # Feuer_Aus
+    DOOR_OPEN =       6  # Tür_offen
+    PREPARATION =     7  # Vorbereitung
+    PRE_HEATING =     8  # Vorwärmen
+    IGNITION =        9  # Zünden
+    SHUTDOWN_WAIT =   10 # Abstellen_Warten
+    SHUTDOWN_WAIT_1 = 11 # Abstellen_Warten1
+    SHUTDOWN_FEED_1 = 12 # Abstellen_Einschub1
+    SHUTDOWN_WAIT_2 = 13 # Abstellen_Warten2
+    SHUTDOWN_FEED_2 = 14 # Abstellen_Einschub2
+    CLEANING =        15 # Abreinigen
+    WAIT_2H =         16 # Warten_2h
+    SUCTION_HEATING = 17 # Saugen_Heizen
+    IGNITION_FAULT =  18 # Fehlzündung
+    STANDBY =         19 # Betriebsbereit
+
+class InputRegisters(Enum):
+                                                    # adr   offset scale dec    unit     value_map         name                                            desc
+    SYSTEM_STATUS =                                 (34001, 30001, 1,    0,     "",      SystemStatus,     "SYSTEM_STATUS",                                "Anlagenzustand")
+    FURNACE_STATUS =                                (34002, 30001, 1,    0,     "",      FurnaceStatus,    "FURNACE_STATUS",                               "Kesselzustand")
+    HEATER_TEMPERATURE =                            (30001, 30001, 2,    0,     "°C",    None,             "HEATER_TEMPERATURE",                           "Kesseltemperatur")
+    SENSOR_1 =                                      (30008, 30001, 2,    0,     "°C",    None,             "SENSOR_1",                                     "Fühler 1")
+    RETURN_FLOW_SENSOR =                            (30010, 30001, 2,    0,     "°C",    None,             "RETURN_FLOW_SENSOR",                           "Fühler 1")
+    OPERATING_HOURS =                               (30021, 30001, 1,    0,     "h",     None,             "OPERATING_HOURS",                              "Betriebsstunden")
+    FILL_LEVEL_PELLETS_CONTAINER =                  (30022, 30001, 201,  1,     "%",     None,             "FILL_LEVEL_PELLETS_CONTAINER",                 "Füllstand im Pelletsbehälter")
+    HEATER_STARTS_COUNT =                           (30023, 30001, 1,    0,     "#",     None,             "HEATER_STARTS_COUNT",                          "Anzahl der Brennerstarts")
+    CALCULATED_HEATER_TARGET_TEMPERATURE =          (30028, 30001, 2,    0,     "°C",    None,             "CALCULATED_HEATER_TARGET_TEMPERATURE",         "Errechnete Kesselsolltemperatur")
+    RETURN_FLOW_CONTROL =                           (30037, 30001, 1,    0,     "%",     None,             "RETURN_FLOW_CONTROL",                          "Rücklaufpumpen Ansteuerung")
+    HOURS_SINCE_LAST_MAINTENANCE =                  (30056, 30001, 1,    0,     "h",     None,             "HOURS_SINCE_LAST_MAINTENANCE",                 "Stunden seit letzter Wartung")
+    HOURS_OF_PELLETS_OPERATION =                    (30063, 30001, 1,    0,     "h",     None,             "HOURS_OF_PELLETS_OPERATION",                   "Stunden im Pelletsbetrieb")
+    HOURS_OF_HEATING =                              (30064, 30001, 1,    0,     "h",     None,             "HOURS_OF_HEATING",                             "Stunden im Heizen")
+    CALCULATED_TARGET_RETURN_FLOW =                 (30067, 30001, 2,    0,     "°C",    None,             "CALCULATED_TARGET_RETURN_FLOW",                "Rücklauf Soll errechnet")
+    KG_COUNT =                                      (30082, 30001, 1,    0,     "kg",    None,             "KG_COUNT",                                     "Resetierbarer kg-Zähler")
+    TONS_COUNT =                                    (30083, 30001, 1,    0,     "t",     None,             "TONS_COUNT",                                   "Resetierbarer t-Zähler")
+    TOTAL_PELLETS_CONSUMPTION =                     (30084, 30001, 10,   1,     "t",     None,             "TOTAL_PELLETS_CONSUMPTION",                    "Pelletverbrauch Gesamt")
+    #POWER_USAGE_DAILY =                             (30085, 30001, 1,    0,     "KWh",   None,             "POWER_USAGE_DAILY",                            "Tagesertrag")
+    REMAINING_HOURS_UNTIL_ASH_REMOVAL =             (30087, 30001, 1,    0,     "h",     None,             "REMAINING_HOURS_UNTIL_ASH_REMOVAL",            "Verbleibende Heizstunden bis zur Asche entleeren Warnung")
+    COUNT_CLEANING_CYCLES =                         (30102, 30001, 1,    0,     "#",     None,             "COUNT_CLEANING_CYCLES",                        "Anzahl der Reinigungen")
+    MINUTES_UNTIL_NEXT_CLEANING_CYLCLE =            (30103, 30001, 1,    0,     "min",   None,             "MINUTES_UNTIL_NEXT_CLEANING_CYLCLE",           "Zeit bis zur nächsten Reinigung")
+    RETURN_FLOW_TEMPERATURE_AT_CIRCULATION_LINE =   (30712, 30001, 2,    0,     "°C",    None,             "RETURN_FLOW_TEMPERATURE_AT_CIRCULATION_LINE",  "Rücklauftemperatur an der Zirkulations Leitung")
+    OUTSIDE_TEMPERATURE =                           (31001, 30001, 2,    0,     "°C",    None,             "OUTSIDE_TEMPERATURE",                          "Außentemperatur")
+    HEATING_FLOW_TEMPERATURE_ACTUAL =               (31031, 30001, 2,    0,     "°C",    None,             "HEATING_FLOW_TEMPERATURE_ACTUAL",              "HK1 - Vorlauf-Isttemperatur")
+    HEATING_FLOW_TEMPERATURE_TARGET =               (31032, 30001, 2,    0,     "°C",    None,             "HEATING_FLOW_TEMPERATURE_TARGET",              "HK1 - Vorlauf-Solltemperatur")
+    ROOM_TEMPERATURE =                              (31033, 30001, 2,    0,     "°C",    None,             "ROOM_TEMPERATURE",                             "HK1 - Raumtemperatur")
+    BOILER_TEMPERATURE_TOP =                        (31631, 30001, 2,    0,     "°C",    None,             "BOILER_TEMPERATURE_TOP",                       "Boiler 1 - Boilertemperatur oben")
+    BOILER_PUMP_CONTROL =                           (31633, 30001, 1,    0,     "%",     None,             "BOILER_PUMP_CONTROL",                          "Boiler 1 - Boilerpumpe Ansteuerung")
+    BUFFER_TEMPERATURE_TOP =                        (32001, 30001, 2,    0,     "°C",    None,             "BUFFER_TEMPERATURE_TOP",                       "Puffertemperatur oben")
+    #BUFFER_TEMPERATURE_CENTER =                     (32002, 30001, 2,    0,     "°C",    None,             "BUFFER_TEMPERATURE_CENTER",                    "Puffertemperatur Mitte")
+    BUFFER_TEMPERATURE_BOTTOM =                     (32003, 30001, 2,    0,     "°C",    None,             "BUFFER_TEMPERATURE_BOTTOM",                    "Puffertemperatur unten")
+    BUFFER_PUMP_CONTROL =                           (32004, 30001, 1,    0,     "%",     None,             "BUFFER_PUMP_CONTROL",                          "Pufferpumpen Ansteuerung")
+    BUFFER_CHARGING_STATE =                         (32007, 30001, 1,    0,     "%",     None,             "BUFFER_CHARGING_STATE",                        "Pufferladezustand")
+    
+    
 
 """
     PE1_TEMPERATURE = 30001# Kesseltemperatur °C 2 0

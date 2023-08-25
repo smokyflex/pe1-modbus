@@ -15,17 +15,30 @@ LOGGER = logging.getLogger(__name__)
 
 # Callback function when the client successfully connects to the MQTT broker
 def on_connect(client, userdata, flags, rc):
+
+    interval_in_s = 30
+
     LOGGER.debug("Connected with result code " + str(rc))
 
     selected_regs = [
+        InputRegisters.SYSTEM_STATUS,
+        InputRegisters.FURNACE_STATUS,
         InputRegisters.BOILER_TEMPERATURE_TOP,
+        InputRegisters.BOILER_PUMP_CONTROL,
         InputRegisters.FILL_LEVEL_PELLETS_CONTAINER,
         InputRegisters.TOTAL_PELLETS_CONSUMPTION,
+        InputRegisters.KG_COUNT,
         InputRegisters.HEATING_FLOW_TEMPERATURE_ACTUAL,
         InputRegisters.HEATING_FLOW_TEMPERATURE_TARGET,
+        InputRegisters.OUTSIDE_TEMPERATURE,
+        InputRegisters.ROOM_TEMPERATURE,
         InputRegisters.BUFFER_TEMPERATURE_TOP,
         InputRegisters.BUFFER_TEMPERATURE_BOTTOM,
-        InputRegisters.BUFFER_CHARGING_STATE
+        InputRegisters.BUFFER_PUMP_CONTROL,
+        InputRegisters.BUFFER_CHARGING_STATE,
+        InputRegisters.HEATER_TEMPERATURE,
+        #InputRegisters.HOURS_SINCE_LAST_MAINTENANCE,
+        #InputRegisters.REMAINING_HOURS_UNTIL_ASH_REMOVAL,
     ]
 
     while True:
@@ -52,7 +65,7 @@ def on_connect(client, userdata, flags, rc):
         
         lt_client.close()
 
-        time.sleep(30)
+        time.sleep(interval_in_s)
 
 
 def main():

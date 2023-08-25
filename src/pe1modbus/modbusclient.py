@@ -1,13 +1,15 @@
 from pyModbusTCP.client import ModbusClient
 from typing import Union
+from enum import Enum
 
 from register import InputRegisters
 
 class RegisterOperation:
 
-    def __init__(self, address: int, offset: int, scaling_factor: int, decimals: int, unit: str, name: str, description: str) -> None:
+    def __init__(self, address: int, offset: int, scaling_factor: int, decimals: int, unit: str, value_map: Enum, name: str, description: str) -> None:
         self.name = name
         self.description = description
+        self.value_map = value_map
         self.address = address
         self.offset = offset
         self.scaling_factor = scaling_factor
@@ -35,7 +37,11 @@ class LTModbusClient(ModbusClient):
 
         register_operation = RegisterOperation(*input_register.value)
         response_value = self.read_input_registers(register_operation.relative_address)[0]
-        response_value_scaled = round(response_value / register_operation.scaling_factor, register_operation.decimals)
+        if register_operation.value_map:
+            response_value_scaled = register_operation.value_map(response_value).name
+        else:
+            response_value_scaled = round(response_value / register_operation.scaling_factor, register_operation.decimals)
+
         register_response = RegisterResponse(register_operation.name, response_value_scaled, register_operation.unit) 
 
         return register_response
