@@ -17,6 +17,7 @@ LOGGER = logging.getLogger(__name__)
 def on_connect(client, userdata, flags, rc):
 
     interval_in_s = 30
+    host_address = "ip_to_host"
 
     LOGGER.debug("Connected with result code " + str(rc))
 
@@ -45,7 +46,7 @@ def on_connect(client, userdata, flags, rc):
 
         # TCP auto connect on first modbus request
         lt_client = LTModbusClient(
-            host="192.168.0.222", 
+            host=host_address, 
             port=502, 
             unit_id=2
         )
@@ -72,9 +73,12 @@ def main():
 
     logging.basicConfig(level=logging.DEBUG)
     logging.getLogger("pymodbus").setLevel(logging.DEBUG)
+
+    user = "some_user"
+    pwd = user
     
     mqtt_client = mqtt.Client()
-    mqtt_client.username_pw_set("smoky", "smoky")
+    mqtt_client.username_pw_set(user, pwd)
     mqtt_client.on_connect = on_connect
     mqtt_client.connect("127.0.0.1", 1883)
     mqtt_client.loop_forever()
