@@ -18,7 +18,7 @@ https://loxwiki.atlassian.net/wiki/spaces/LOX/pages/1704984631/Fr+ling+Pelletske
 
 
 ## Modbus TCP
-After the hardware setup, there are many ways to test the modbus communication. QModMaster is a great tool for exploring Registers via a GUI - https://github.com/zhanglongqi/qModMaster. You could also write some short script in Python using the module pyModbusTCP (https://pypi.org/project/pyModbusTCP/), see **** in this repo for an example.
+After the hardware setup, there are many ways to test the modbus communication. QModMaster is a great tool for exploring Registers via a GUI - https://github.com/zhanglongqi/qModMaster. You could also write some short script in Python using the module pyModbusTCP (https://pypi.org/project/pyModbusTCP/), see the /src/ section in this repo for an example.
 
 Information on Register addresses etc. can be studied in the ModBus Lambdatronic 3200 Modbus Definition Document (google search should provide a link to download). 
 
