@@ -1,5 +1,7 @@
 # pe1-modbus
 
+NOTE: This project is not an official HA or HACS integration!
+
 This project offers a guideline how a Fröling PE1 / Lambdatronic Pellet boiler can be integrated into Home Assistant (HA - https://www.home-assistant.io) using the builtin Modbus interface.
 
 This repo also includes python scripts that use a modbus module to read registers from PE1 an then post them via MQTT to use inside Home Assistant but this is not necessary since HA has it's own Modbus interface where we can directly map PE1 registers to HA entities.
