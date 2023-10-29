@@ -1,0 +1,304 @@
+- name: pe1_test
+  type: tcp
+  host: xxx.xxx.xxx.xxx
+  port: 502
+  # maybe need 1 second delay after connect for device to get ready
+  #delay: 1
+  sensors:
+    # SYSTEM STATUS
+    - name: Modbus PE1 System Status Enum
+      unique_id: modbus_pe1_system_status_enum
+      slave: 2
+      input_type: input
+      address: 4000
+      scan_interval: 30
+      device_class: enum
+    - name: Modbus PE1 Furnace Status Enum
+      unique_id: modbus_pe1_furnace_status_enum
+      slave: 2
+      input_type: input
+      address: 4001
+      scan_interval: 30
+      device_class: enum
+    #- name: Modbus PE1 Heating Mode Enum
+    #  unique_id: modbus_pe1_heating_mode_enum
+    #  slave: 2
+    #  input_type: holding
+    #  address: 46
+    #  count: 18
+    #  scan_interval: 30
+
+    # TEMPERATURES
+    - name: Modbus PE1 Hotwater Temperature Top
+      unique_id: modbus_pe1_hotwater_temperature_top
+      slave: 2
+      input_type: input
+      # 31631 - 30001 = 1630
+      address: 1630
+      scan_interval: 30
+      scale: 0.5
+      precision: 0
+      device_class: temperature
+      state_class: measurement
+      unit_of_measurement: °C
+    - name: Modbus PE1 Furnace Temperature
+      unique_id: modbus_pe1_furnace_temperature
+      slave: 2
+      input_type: input
+      address: 0
+      scan_interval: 30
+      scale: 0.5
+      precision: 0
+      device_class: temperature
+      state_class: measurement
+      unit_of_measurement: °C
+    - name: Modbus PE1 Calculated Heater Target Temperature
+      unique_id: modbus_pe1_calculated_heater_target_temperature
+      slave: 2
+      input_type: input
+      address: 27
+      scan_interval: 30
+      scale: 0.5
+      precision: 0
+      device_class: temperature
+      state_class: measurement
+      unit_of_measurement: °C
+    - name: Modbus PE1 Return Flow Temperature
+      unique_id: modbus_pe1_return_flow_temperature
+      slave: 2
+      input_type: input
+      address: 9
+      scan_interval: 30
+      scale: 0.5
+      precision: 0
+      device_class: temperature
+      state_class: measurement
+      unit_of_measurement: °C
+    - name: Modbus PE1 Calculated Target Return Flow Temperature
+      unique_id: modbus_pe1_calculated_target_return_flow_temperature
+      slave: 2
+      input_type: input
+      address: 66
+      scan_interval: 30
+      scale: 0.5
+      precision: 0
+      device_class: temperature
+      state_class: measurement
+      unit_of_measurement: °C
+    - name: Modbus PE1 Target Flow Temperature At Circulation Line
+      unique_id: modbus_pe1_return_flow_temperature_at_circulation_line
+      slave: 2
+      input_type: input
+      address: 711
+      scan_interval: 30
+      scale: 0.5
+      precision: 0
+      device_class: temperature
+      state_class: measurement
+      unit_of_measurement: °C
+    - name: Modbus PE1 Outside Temperature
+      unique_id: modbus_pe1_outside_temperature
+      slave: 2
+      input_type: input
+      address: 1000
+      scan_interval: 30
+      scale: 0.5
+      precision: 0
+      device_class: temperature
+      state_class: measurement
+      unit_of_measurement: °C
+    - name: Modbus PE1 Flow Temperature Actual
+      unique_id: modbus_pe1_flow_temperature_actual
+      slave: 2
+      input_type: input
+      address: 1030
+      scan_interval: 30
+      scale: 0.5
+      precision: 0
+      device_class: temperature
+      state_class: measurement
+      unit_of_measurement: °C
+    - name: Modbus PE1 Flow Temperature Target
+      unique_id: modbus_pe1_flow_temperature_target
+      slave: 2
+      input_type: input
+      address: 1031
+      scan_interval: 30
+      scale: 0.5
+      precision: 0
+      device_class: temperature
+      state_class: measurement
+      unit_of_measurement: °C
+    - name: Modbus PE1 Room Temperature
+      unique_id: modbus_pe1_room_temperature
+      slave: 2
+      input_type: input
+      address: 1032
+      scan_interval: 30
+      scale: 0.5
+      precision: 0
+      device_class: temperature
+      state_class: measurement
+      unit_of_measurement: °C
+    - name: Modbus PE1 Buffer Temperature Top
+      unique_id: modbus_pe1_buffer_temperature_top
+      slave: 2
+      input_type: input
+      address: 2000
+      scan_interval: 30
+      scale: 0.5
+      precision: 0
+      device_class: temperature
+      state_class: measurement
+      unit_of_measurement: °C
+    - name: Modbus PE1 Buffer Temperature Bottom
+      unique_id: modbus_pe1_buffer_temperature_bottom
+      slave: 2
+      input_type: input
+      address: 2002
+      scan_interval: 30
+      scale: 0.5
+      precision: 0
+      device_class: temperature
+      state_class: measurement
+      unit_of_measurement: °C
+
+    # CONSUMPTION
+    - name: Modbus PE1 Total Pellet Consumption
+      unique_id: modbus_pe1_total_pellet_consumption
+      slave: 2
+      input_type: input
+      address: 83
+      scan_interval: 3600
+      scale: 0.1
+      precision: 1
+      device_class: weight
+      state_class: total_increasing
+      unit_of_measurement: mg
+    - name: Modbus PE1 Pellet Consumption KG
+      unique_id: modbus_pe1_pellet_consumption_kg
+      slave: 2
+      input_type: input
+      address: 81
+      scan_interval: 3600
+      scale: 1
+      precision: 0
+      device_class: weight
+      state_class: total
+      unit_of_measurement: kg
+    - name: Modbus PE1 Pellet Fill Level
+      unique_id: modbus_pe1_pellet_fill_level
+      slave: 2
+      input_type: input
+      address: 21
+      scan_interval: 3600
+      scale: 0.005
+      precision: 1
+      device_class: battery
+      state_class: measurement
+      unit_of_measurement: '%'
+    
+    # PUMP CONTROLS
+    - name: Modbus PE1 Return Flow Pump Control
+      unique_id: modbus_pe1_return_flow_pump_control
+      slave: 2
+      input_type: input
+      address: 36
+      scan_interval: 30
+      scale: 1
+      precision: 0
+      device_class: power_factor
+      state_class: measurement
+      unit_of_measurement: '%'
+    - name: Modbus PE1 Water Boiler Pump Control
+      unique_id: modbus_pe1_water_boiler_pump_control
+      slave: 2
+      input_type: input
+      address: 1632
+      scan_interval: 30
+      scale: 1
+      precision: 0
+      device_class: power_factor
+      state_class: measurement
+      unit_of_measurement: '%'
+    - name: Modbus PE1 Buffer Pump Control
+      unique_id: modbus_pe1_buffer_pump_control
+      slave: 2
+      input_type: input
+      address: 2003
+      scan_interval: 30
+      scale: 1
+      precision: 0
+      device_class: power_factor
+      state_class: measurement
+      unit_of_measurement: '%'
+
+    # BUFFER CHARGE
+    - name: Modbus PE1 Buffer Charge
+      unique_id: modbus_pe1_buffer_charge
+      slave: 2
+      input_type: input
+      address: 2006
+      scan_interval: 30
+      scale: 1
+      precision: 0
+      device_class: battery
+      state_class: measurement
+      unit_of_measurement: '%'
+
+    # MISC
+    - name: Modbus PE1 Operating Hours
+      unique_id: modbus_pe1_operating_hours
+      slave: 2
+      input_type: input
+      address: 20
+      scan_interval: 3600
+      scale: 1
+      precision: 0
+      device_class: duration
+      state_class: total_increasing
+      unit_of_measurement: 'h'
+    - name: Modbus PE1 Hours Since Last Maintenance
+      unique_id: modbus_pe1_hours_since_last_maintenance
+      slave: 2
+      input_type: input
+      address: 55
+      scan_interval: 3600
+      scale: 1
+      precision: 0
+      device_class: duration
+      state_class: total
+      unit_of_measurement: 'h'
+    - name: Modbus PE1 Hours Of Pellets Operation
+      unique_id: modbus_pe1_hours_of_pellets_operation
+      slave: 2
+      input_type: input
+      address: 62
+      scan_interval: 3600
+      scale: 1
+      precision: 0
+      device_class: duration
+      state_class: total_increasing
+      unit_of_measurement: 'h'
+    - name: Modbus PE1 Hours Of Heating
+      unique_id: modbus_pe1_hours_of_heating
+      slave: 2
+      input_type: input
+      address: 63
+      scan_interval: 3600
+      scale: 1
+      precision: 0
+      device_class: duration
+      state_class: total_increasing
+      unit_of_measurement: 'h'
+    - name: Modbus PE1 Hours Until Ash Removal
+      unique_id: modbus_pe1_hours_until_ash_removal
+      slave: 2
+      input_type: input
+      address: 86
+      scan_interval: 3600
+      scale: 1
+      precision: 0
+      device_class: duration
+      state_class: measurement
+      unit_of_measurement: 'h'

@@ -1,0 +1,138 @@
+- name: "Modbus PE1 System Status"
+  unique_id: "modbus_pe1_system_status"
+  state: >
+    {% set mapper =  {      
+      '0' : 'Continuous load',
+      '1' : 'Domestic hot water',
+      '2' : 'Automatic',
+      '3' : 'Firewood operation',
+      '4' : 'Cleaning',
+      '5' : 'Boiler off',
+      '6' : 'Extra heating',
+      '7' : 'Chimney sweep',
+      '8' : 'Cleaning' } %}
+    {% set state =  states.sensor.modbus_pe1_system_status_enum.state %}
+    {{ mapper[state] if state in mapper else 'Unknown' }}
+  icon: >
+    {% if this.state == 'Automatic' %}
+      mdi:refresh-auto
+    {% elif this.state == 'Domestic hot water' %}
+      mdi:water-pump
+    {% elif this.state == 'Continous load' %}
+      mdi:hours-24
+    {% else %}
+      mdi:alert-circle
+    {% endif %}
+
+
+- name: "Modbus PE1 Furnace Status"
+  unique_id: "modbus_pe1_furnace_status_mapped"
+  state: >
+    {% set mapper =  {
+      '0' : 'FAULT',
+      '1' : 'Boiler off',
+      '2' : 'Heating up',
+      '3' : 'Heating',
+      '4' : 'Slumber',
+      '5' : 'Off',
+      '6' : 'Door open',
+      '7' : 'Preparation',
+      '8' : 'Pre-heating',
+      '9' : 'Ignition',
+      '10' : 'Shutdown wait',
+      '11' : 'Shutdown wait 1',
+      '12' : 'Shutdown feed 1',
+      '13' : 'Shutdown wait 2',
+      '14' : 'Shutdown feed 2',
+      '15' : 'Cleaning',
+      '16' : 'Wait 2h',
+      '17' : 'Suction / Heating',
+      '18' : 'Ignition fault',
+      '19' : 'Standby',
+      '20' : 'Close grate',
+      '21' : 'Empty stoker',
+      '22' : 'Pre-Heating',
+      '23' : 'Suction',
+      '24' : 'Close BBF',
+      '25' : 'Open BBF',
+      '26' : 'Tilt grate',
+      '27' : 'Warming-Up / Ignition',
+      '28' : 'Empty feed',
+      '29' : 'Stoker fill',
+      '30' : 'Warming-Up Lambda Probe',
+      '31' : 'FD fan run-on I',
+      '32' : 'FD fan run-on II',
+      '33' : 'Stopped',
+      '34' : 'Additional Ignition',
+      '35' : 'Ignition wait',
+      '36' : 'TS: Close BBF',
+      '37' : 'TS: Ventilate boiler',
+      '38' : 'TS: Ignition',
+      '39' : 'TS: min. feed',
+      '40' : 'Close BBF',
+      '41' : 'FAULT: HL/ES',
+      '42' : 'FAULT: Tilting grate',
+      '43' : 'FAULT: C.C.Overpressure',
+      '44' : 'FAULT: Door Switch',
+      '45' : 'FAULT: ID Fan',
+      '46' : 'FAULT: Heating system',
+      '47' : 'ERROR: STL/EO',
+      '48' : 'ERROR: Tilting grate',
+      '49' : 'ERROR: C.C. Overpressure',
+      '50' : 'ERROR: Door Switch',
+      '51' : 'ERROR: ID Fan',
+      '52' : 'ERROR: Heating system',
+      '53' : 'ERROR: Stoker',
+      '54' : 'FAULT: Stoker',
+      '55' : 'TS: Empty stoker',
+      '56' : 'Purge',
+      '57' : 'FAULT: wood chip',
+      '58' : 'ERROR: Wood chip',
+      '59' : 'Emerg. Oper.: Door open',
+      '60' : 'Emerg. Oper.: Heating up',
+      '61' : 'Emerg. Oper.: Heating',
+      '62' : 'ERROR: STL/EO',
+      '63' : 'ERROR: General',
+      '64' : 'Emerg. Oper.: Shutdown',
+      '65' : 'Self test active',
+      '66' : 'Troubleshooting 20min',
+      '67' : 'ERROR: Drop box',
+      '68' : 'FAULT: Drop box',
+      '69' : 'Cleaning possible',
+      '70' : 'Heating - Cleaning',
+      '71' : 'LW Heating up',
+      '72' : 'LW Heating',
+      '73' : 'LW Heat/Shut down',
+      '74' : 'FAULT save',
+      '75' : 'FGR run-on',
+      '76' : 'Clean FGR',
+      '77' : 'Igniton OFF',
+      '78' : 'Cleaning filter',
+      '79' : 'Heating wizard',
+      '80' : 'Ignite firewood boiler',
+      '81' : 'SH fault',
+      '82' : 'Sensor check' } %}
+    {% set state =  states.sensor.modbus_pe1_furnace_status_enum.state %}
+    {{ mapper[state] if state in mapper else 'Unknown' }}
+  icon: >
+    {% if this.state == 'Standby' %}
+      mdi:sleep
+    {% elif this.state == 'Ignition' %}
+      mdi:fire
+    {% elif this.state == 'Pre-heating' %}
+      mdi:fire
+    {% elif this.state == 'Heating' %}
+      mdi:fire
+    {% elif this.state == 'Heating up' %}
+      mdi:fire
+    {% elif this.state == 'Preparation' %}
+      mdi:fire
+    {% elif this.state == 'Shutdown wait' %}
+      mdi:sleep
+    {% elif this.state == 'Shutdown wait 1' %}
+      mdi:sleep
+    {% elif this.state == 'Shutdown wait 2' %}
+      mdi:sleep
+    {% else %}
+      mdi:alert-circle
+    {% endif %}
