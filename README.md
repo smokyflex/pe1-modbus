@@ -71,7 +71,7 @@ Nous pouvons ensuite créer une entité de template dans un autre fichier yaml u
 template: !include template.yaml
 ```
 
-Inside this file we can map the enum values of our entity `modbus_pe1_system_status_enum` to string values that we can use to display in the frontend in some human readable format:
+À l'intérieur de ce fichier, nous pouvons mapper les valeurs énumérées de notre entité `modbus_pe1_system_status_enum` à des valeurs de chaînes de caractères que nous pouvons utiliser pour afficher dans le frontend dans un format lisible par l'homme :
 
 ```yaml
 - name: "Modbus PE1 System Status"
@@ -100,22 +100,21 @@ Inside this file we can map the enum values of our entity `modbus_pe1_system_sta
       mdi:alert-circle
     {% endif %}
 ```
-Here you could also change the icon of the entity based on it's state like shown above.
+Ici, vous pourriez également changer l'icône de l'entité en fonction de son état, comme montré ci-dessus.
 
-The same can be done for the boiler/furnace status. See the full `modbus.yaml` and `template.yaml` included in this repo for more info.
-
+La même chose peut être faite pour le statut de la chaudière/du four. Voir le `modbus.yaml` complet et le `template.yaml` inclus dans ce dépôt pour plus d'informations.
 
 ## TODO
 
-The Lambdatronic Modbus Definition document describes how to use modbus to remote control the boiler heating mode. I have not yet managed to get that working. According to the document the heating mode register adrresses should reside at 48047 - 48064 in the holding registers. 
-So theoretically we should be able to write those registers to change the heating mode.
-There are 18 registers for that because we could have a max of 18 possible heating-circuits. Those registers should hold values from 0 to 5 for the six different modes: 
+Le document de définition Modbus Lambdatronic décrit comment utiliser modbus pour contrôler à distance le mode de chauffage de la chaudière. Je n'ai pas encore réussi à faire fonctionner cela. Selon le document, les adresses des registres du mode de chauffage devraient se trouver entre 48047 et 48064 dans les registres de maintien.
+Théoriquement, nous devrions être capables d'écrire sur ces registres pour changer le mode de chauffage.
+Il y a 18 registres pour cela parce que nous pourrions avoir un maximum de 18 circuits de chauffage possibles. Ces registres devraient contenir des valeurs de 0 à 5 pour les six différents modes :
 
-* 0 ... Aus
-* 1 ... Automatik
-* 2 ... Extraheizen
-* 3 ... Absenken
-* 4 ... Dauerabsenken
-* 5 ... Partybetrieb
+ * 0 ... Éteint
+ * 1 ... Automatique
+ * 2 ... Chauffage d'appoint
+ * 3 ... Réduction
+ * 4 ... Réduction permanente
+ * 5 ... Mode fête
 
-However when experimenting with those registeres I am unable to neither read the correct heating mode value nor write to it. Any help here would be much appreciated.
+Cependant, lors de l'expérimentation avec ces registres, je ne suis ni capable de lire la valeur correcte du mode de chauffage ni d'écrire dessus. Toute aide ici serait très appréciée.
