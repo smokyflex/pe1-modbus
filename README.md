@@ -1,44 +1,44 @@
 # pe1-modbus
 
-NOTE: This project is not an official HA or HACS integration!
+REMARQUE : Ce projet n'est pas une intégration officielle de HA ou HACS !
 
-This project offers a guideline how a Fröling PE1 / Lambdatronic Pellet boiler can be integrated into Home Assistant (HA - https://www.home-assistant.io) using the builtin Modbus interface.
+Ce projet propose une ligne directrice sur la manière dont une chaudière à pellets Fröling PE1 / Lambdatronic peut être intégrée dans Home Assistant (HA - https://www.home-assistant.io) en utilisant l'interface Modbus intégrée.
 
-This repo also includes python scripts that use a modbus module to read registers from PE1 an then post them via MQTT to use inside Home Assistant but this is not necessary since HA has it's own Modbus interface where we can directly map PE1 registers to HA entities.
+Ce dépôt comprend également des scripts python qui utilisent un module modbus pour lire les registres de PE1 puis les publier via MQTT pour être utilisés dans Home Assistant, mais cela n'est pas nécessaire puisque HA dispose de sa propre interface Modbus où nous pouvons mapper directement les registres PE1 aux entités HA.
 
-At the time of writing the only drawback is that it seems to be impossible to combine those Modbus entites in HA into a Homeassitant device. The MQTT interface supports this so if you want that check the code in /src/pe1modbus.
+Au moment de la rédaction, le seul inconvénient est qu'il semble impossible de combiner ces entités Modbus dans HA en un appareil Homeassistant. L'interface MQTT prend en charge cela, donc si vous le souhaitez, vérifiez le code dans /src/pe1modbus.
 
-## Hardware Requirements
-The Lambdatronic board offers 2 serial interfaces, which can be configured to Modbus TCP in the settings.
-To conveiently integrate the device into the local LAN network, the serial connection needs an adapter to RJ45 (RS232 to Ethernet Converter). This one by Waveshare (Industrial RS232/RS485 to Ethernet Converter) was used and is confiremd to work:
+## Exigences matérielles
+La carte Lambdatronic offre 2 interfaces série, qui peuvent être configurées en Modbus TCP dans les paramètres.
+Pour intégrer facilement l'appareil dans le réseau LAN local, la connexion série nécessite un adaptateur vers RJ45 (Convertisseur RS232 vers Ethernet). Celui de Waveshare (Convertisseur Industriel RS232/RS485 vers Ethernet) a été utilisé et son fonctionnement est confirmé :
 - https://www.waveshare.com/rs232-485-to-eth-for-eu.htm
 
-The RS232 side can be connected to the COM2 port on the Lambdtronic. Ensure you use the proper cable that has the RX TX pins crossed.
+Le côté RS232 peut être connecté au port COM2 sur la Lambdatronic. Assurez-vous d'utiliser le câble approprié qui croise les broches RX TX.
 
-More infromation on the hardware setup can be found in this guide:
+Plus d'informations sur la configuration matérielle peuvent être trouvées dans ce guide :
 https://loxwiki.atlassian.net/wiki/spaces/LOX/pages/1704984631/Fr+ling+Pelletskessel+RS232+an+Loxone+Modbus+TCP?focusedCommentId=1705050279
 
 
 ## Modbus TCP
-After the hardware setup, there are many ways to test the modbus communication. QModMaster is a great tool for exploring Registers via a GUI - https://github.com/zhanglongqi/qModMaster. You could also write some short script in Python using the module pyModbusTCP (https://pypi.org/project/pyModbusTCP/), see the /src/ section in this repo for an example.
+Après la configuration matérielle, il existe de nombreuses façons de tester la communication modbus. QModMaster est un excellent outil pour explorer les registres via une interface graphique - https://github.com/zhanglongqi/qModMaster. Vous pouvez également écrire un court script en Python en utilisant le module pyModbusTCP (https://pypi.org/project/pyModbusTCP/), voir la section /src/ de ce dépôt pour un exemple.
 
-Information on Register addresses etc. can be studied in the ModBus Lambdatronic 3200 Modbus Definition Document (google search should provide a link to download). 
+Les informations sur les adresses des registres, etc., peuvent être étudiées dans le document de définition ModBus Lambdatronic 3200 Modbus (une recherche Google devrait fournir un lien pour télécharger).
 
 ## Home Assitant Modbus
 
-Home Assitant offers a interface to include entities using the Modbus protocol - https://www.home-assistant.io/integrations/modbus/
+Home Assitant offre une interface pour inclure des entités en utilisant le protocole Modbus - https://www.home-assistant.io/integrations/modbus/
 
-The cleanest way to do this would be to create a `modbus.yaml` in your HA home directory (next to the configuration.yaml) and include it into the configuration like so:
+La manière la plus propre de faire cela serait de créer un fichier modbus.yaml dans votre répertoire domestique HA (à côté du configuration.yaml) et de l'inclure dans la configuration ainsi :
 
 ```yaml
 modbus: !include modbus.yaml
 ```
 
-This repo includes an example `modbus.yaml` file including a few entities that can be easily extended to suit your needs. 
+Ce dépôt comprend un fichier `modbus.yaml` exemple incluant quelques entités qui peuvent être facilement étendues selon vos besoins.
 
-Inside the `modbus.yaml` we first need to specify the `hub` which for this setup is the address of the Waveshare Converter.
+Dans le fichier `modbus.yaml`, nous devons d'abord spécifier le `hub`, qui pour cette configuration est l'adresse du convertisseur Waveshare.
 
-The PE1 boiler usues a seperate Ethernet connection which is intended for the Fröling Connect service. Make sure to specify the Waveshare converter address in the yaml.
+La chaudière PE1 utilise une connexion Ethernet séparée qui est destinée au service Fröling Connect. Assurez-vous de spécifier l'adresse du convertisseur Waveshare dans le yaml.
 
 ```yaml
 - name: pe1_hub
@@ -49,11 +49,11 @@ The PE1 boiler usues a seperate Ethernet connection which is intended for the Fr
     ...
 ```
 
-In the sensors section, you can spceify the register addresses you want to map to HA entities. For further information on how to address input registers holding registers etc. study the HA Modbus documentation linked above.
+Dans la section des capteurs, vous pouvez spécifier les adresses des registres que vous souhaitez mapper aux entités HA. Pour plus d'informations sur la manière d'adresser les registres d'entrée, les registres de conservation, etc., étudiez la documentation HA Modbus liée ci-dessus.
 
-The PE1 system offers two input registers that specify the system status and the boiler status which are impelemented via an enum. See the Lambdatronic Modbus Definition PDF for more information on this. If you want to amp those status integer values to the corresponding status strings you can do this in HA via templating.
+Le système PE1 propose deux registres d'entrée qui spécifient l'état du système et l'état de la chaudière qui sont implémentés via un enum. Voir le PDF de définition Modbus Lambdatronic pour plus d'informations à ce sujet. Si vous souhaitez associer ces valeurs entières d'état aux chaînes de caractères correspondantes, vous pouvez le faire dans HA via le templating.
 
-Example: So lets say we have declared one entity for the system status in our `modbus.yaml` like so: 
+Exemple : Disons que nous avons déclaré une entité pour le statut du système dans notre fichier `modbus.yaml` comme ceci :
 
 ```yaml
 - name: Modbus PE1 System Status Enum
@@ -65,7 +65,7 @@ Example: So lets say we have declared one entity for the system status in our `m
   device_class: enum
 ```
 
-We can then create a template entity in e.g. another yaml file used for template entities in the HA config directory `template.yaml` which is again included in the `configuration.yaml` like so:
+Nous pouvons ensuite créer une entité de template dans un autre fichier yaml utilisé pour les entités de template dans le répertoire de configuration de HA `template.yaml`, qui est à nouveau inclus dans le `configuration.yaml` ainsi :
 
 ```yaml
 template: !include template.yaml
