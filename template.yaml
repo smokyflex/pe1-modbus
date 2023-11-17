@@ -136,3 +136,32 @@
     {% else %}
       mdi:alert-circle
     {% endif %}
+
+- name: "Modbus PE1 Heating Mode"
+  unique_id: "modbus_pe1_heating_mode"
+  state: >
+    {% set mapper =  {
+      '0' : 'Off',
+      '1' : 'Automatic',
+      '2' : 'Extra heating',
+      '3' : 'Setback',
+      '4' : 'Continuous setback',
+      '5' : 'Party mode' } %}
+    {% set state =  states.sensor.modbus_pe1_heating_mode_enum.state %}
+    {{ mapper[state] if state in mapper else 'Unknown' }}
+  icon: >
+    {% if this.state == 'Off' %}
+      mdi:power
+    {% elif this.state == 'Automatic' %}
+      mdi:clock
+    {% elif this.state == 'Extra heating' %}
+      mdi:sun-clock
+    {% elif this.state == 'Setback' %}
+      mdi:moon-waning-crescent
+    {% elif this.state == 'Continuous setback' %}
+      mdi:thermometer-minus
+    {% elif this.state == 'Party mode' %}
+      mdi:white-balance-sunny
+    {% else %}
+      mdi:alert-circle
+    {% endif %}

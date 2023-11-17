@@ -1,7 +1,5 @@
 # pe1-modbus
 
-NOTE: This project is not an official HA or HACS integration!
-
 This project offers a guideline how a Fröling PE1 / Lambdatronic Pellet boiler can be integrated into Home Assistant (HA - https://www.home-assistant.io) using the builtin Modbus interface.
 
 This repo also includes python scripts that use a modbus module to read registers from PE1 an then post them via MQTT to use inside Home Assistant but this is not necessary since HA has it's own Modbus interface where we can directly map PE1 registers to HA entities.
@@ -20,7 +18,7 @@ https://loxwiki.atlassian.net/wiki/spaces/LOX/pages/1704984631/Fr+ling+Pelletske
 
 
 ## Modbus TCP
-After the hardware setup, there are many ways to test the modbus communication. QModMaster is a great tool for exploring Registers via a GUI - https://github.com/zhanglongqi/qModMaster. You could also write some short script in Python using the module pyModbusTCP (https://pypi.org/project/pyModbusTCP/), see the /src/ section in this repo for an example.
+After the hardware setup, there are many ways to test the modbus communication. QModMaster is a great tool for exploring Registers via a GUI - https://github.com/zhanglongqi/qModMaster. You could also write some short script in Python using the module pyModbusTCP (https://pypi.org/project/pyModbusTCP/), see **** in this repo for an example.
 
 Information on Register addresses etc. can be studied in the ModBus Lambdatronic 3200 Modbus Definition Document (google search should provide a link to download). 
 
@@ -105,17 +103,97 @@ Here you could also change the icon of the entity based on it's state like shown
 The same can be done for the boiler/furnace status. See the full `modbus.yaml` and `template.yaml` included in this repo for more info.
 
 
-## TODO
+## Remote Control
+We can make use of the HA Modbus interface in combination with a template select to achieve remote control of some functions of the heater like flow and boiler temperature setpoints or the heating mode.
 
-The Lambdatronic Modbus Definition document describes how to use modbus to remote control the boiler heating mode. I have not yet managed to get that working. According to the document the heating mode register adrresses should reside at 48047 - 48064 in the holding registers. 
-So theoretically we should be able to write those registers to change the heating mode.
-There are 18 registers for that because we could have a max of 18 possible heating-circuits. Those registers should hold values from 0 to 5 for the six different modes: 
+For example we can create an input select (Dropdown) in HA that is linked to a holding register like the register to set the heating mode. Combined with a template select automation we can issue write_register commands via the modbus interface and change the heating mode this way.
 
-* 0 ... Aus
-* 1 ... Automatik
-* 2 ... Extraheizen
-* 3 ... Absenken
-* 4 ... Dauerabsenken
-* 5 ... Partybetrieb
+The Modbus definition document specifies the register address for changing the heating mode with 48047 for the heating circuit 1, 48048 for circuit 2 and so on. Since we are dealing with holding registers the offset starts at 40000 so the correct address for the circuit 1 mode is `8046`.
 
-However when experimenting with those registeres I am unable to neither read the correct heating mode value nor write to it. Any help here would be much appreciated.
+This register holds values from 0 to 5 for the six different modes: 
+
+* 0 ... Off
+* 1 ... Automatic
+* 2 ... Extra heating
+* 3 ... Setback
+* 4 ... Continuous setback
+* 5 ... Party mode
+
+We can use a modbus enum definition for the heating mode like shown above with the system status like so:
+
+```yaml
+- name: Modbus PE1 Heating Mode Enum
+  unique_id: modbus_pe1_heating_mode_enum
+  slave: 2
+  input_type: holding
+  address: 8046
+  scan_interval: 30
+  device_class: enum
+```
+
+Moreover we need to define a input select, this can be done via Devices->Helpers. Here create a new helper and select Dropdown, lets name it `heating_mode_select`. 
+
+Here we can add the 6 options for the modes like so:
+```text
+  0. Off
+  1. Automatic,
+  2. Extra heating
+  3. Setback
+  4. Continuous setback
+  5. Party mode
+```
+
+it's important to include the prefix numbers 0-5 since the automation will take the first entry in the character array for each selection for processing.
+
+Now we can create an automation that makes use of the register enum and  input_select like so:
+
+```yaml
+alias: Switch Heating Mode
+description: Switch the heating mode
+trigger:
+  - platform: state
+    entity_id:
+      - sensor.modbus_pe1_heating_mode_enum
+    id: input
+    to: null
+  - platform: state
+    entity_id:
+      - input_select.heating_mode_select
+    id: select
+    to: null
+condition: []
+action:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: input
+        sequence:
+          - variables:
+              values:
+                "0": 0. Off
+                "1": 1. Automatic
+                "2": 2. Extra heating
+                "3": 3. Setback
+                "4": 4. Continuous setback
+                "5": 5. Party mode
+          - service: input_select.select_option
+            target:
+              entity_id: input_select.heating_mode_select
+            data:
+              option: "{{ values.get(trigger.to_state.state) }}"
+      - conditions:
+          - condition: trigger
+            id: select
+        sequence:
+          - service: modbus.write_register
+            data_template:
+              address: 8046
+              slave: 2
+              hub: pe1_test
+              value: "{{ trigger.to_state.state[0] | int(0) }}"
+
+```
+
+Now we can use this dropdown via `input_select.heating_mode_select` and change the heating mode via the modbus interface!
+
+We can also use the same approach to remote control the flow temeperature set point and the hotwater boiler temperature setpoint.
