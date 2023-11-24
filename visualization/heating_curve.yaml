@@ -1,0 +1,88 @@
+type: custom:plotly-graph
+hours_to_show: current_day
+title: Heating Flow Setpoint
+layout:
+  dragmode: pan
+  annotations:
+    - 'y': $ex hass.states["sensor.modbus_pe1_flow_temperature_target"].state
+      x: $ex hass.states["sensor.modbus_pe1_outside_temperature"].state
+      text: >-
+        $ex hass.states["sensor.modbus_pe1_flow_temperature_target"].state + '°C
+        now'
+      showarrow: true
+      arrowcolor: lightgrey
+      arrowsize: 0.8
+      arrowwidth: 1.8
+      arrowside: end
+      yshift: 10
+  xaxis:
+    type: number
+    showlegend: false
+    title: Outside [°C]
+  yaxis:
+    fixedrange: true
+    showlabel: true
+    range:
+      - 0
+      - 100
+    title: Flow Setpoint [°C]
+  height: 300
+  margin:
+    r: 50
+    l: 80
+    t: 50
+entities:
+  - entity: ''
+    x: $ex [-10, 10, hass.states["sensor.modbus_pe1_outside_temperature"].state]
+    'y': >-
+      $ex
+      [hass.states["sensor.modbus_pe1_heating_curve_setpoint_upper"].state,hass.states["sensor.modbus_pe1_heating_curve_setpoint_lower"].state]
+    line:
+      shape: line
+      color: lightgrey
+      dash: dot
+      width: 1
+    marker:
+      size:
+        - 5
+        - 5
+      symbol:
+        - circle
+        - circle
+      color:
+        - orangered
+        - orange
+    mode: lines+markers+text
+    text: >-
+      $ex [hass.states["sensor.modbus_pe1_heating_curve_setpoint_upper"].state +
+      '°C',hass.states["sensor.modbus_pe1_heating_curve_setpoint_lower"].state +
+      '°C']
+    textposition:
+      - top
+      - top
+      - bottom
+    hovertemplate: |
+      $fn ({ hass }) => '%{y}<extra></extra>' 
+    showlegend: false
+  - entity: ''
+    x: $ex [hass.states["sensor.modbus_pe1_outside_temperature"].state]
+    'y': $ex [hass.states["sensor.modbus_pe1_flow_temperature_target"].state]
+    line:
+      shape: line
+      color: lightgrey
+      dash: dot
+      width: 1
+    marker:
+      size:
+        - 6
+      symbol:
+        - diamond
+      color:
+        - green
+    mode: markers
+    hovertemplate: |
+      $fn ({ hass }) => '%{y}<extra></extra>' 
+    showlegend: false
+raw_plotly_config: true
+config:
+  displayModeBar: false

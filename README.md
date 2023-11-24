@@ -1,5 +1,7 @@
 # pe1-modbus
 
+NOTE: This project is not an official HA or HACS integration. 
+
 This project offers a guideline how a Fröling PE1 / Lambdatronic Pellet boiler can be integrated into Home Assistant (HA - https://www.home-assistant.io) using the builtin Modbus interface.
 
 This repo also includes python scripts that use a modbus module to read registers from PE1 an then post them via MQTT to use inside Home Assistant but this is not necessary since HA has it's own Modbus interface where we can directly map PE1 registers to HA entities.
@@ -197,3 +199,38 @@ action:
 Now we can use this dropdown via `input_select.heating_mode_select` and change the heating mode via the modbus interface!
 
 We can also use the same approach to remote control the flow temeperature set point and the hotwater boiler temperature setpoint.
+
+## Visualization
+
+The following shows some visualization ideas, using the new entities we have setup.
+
+### Heating Curve (Flow Target Setpoint)
+
+Most HA visualization options for displaying line and scatter plots are designed to display time-based/historic data from HA entities. The `plotly-graph` card which can be installed via HACS however can be configured in a specific ways to not only use a time-based x-axis. This way we can use entities representing the heating curve lower and upper setpoints, along with the outside temperture and the target flow setpoint to construct a heating curve like shown below.
+
+The plotly-graph configuration for this visualization can be found in `/visualization/heating_curve.yaml`.
+
+![](img/pe1_heating_curve.png?raw=true)
+
+### Historic Data
+
+![](img/hotwater_history.png?raw=true)
+![](img/buffer_temp_history.png?raw=true)
+![](img/heating_flow_history.png?raw=true)
+![](img/pellet_consumption.png?raw=true)
+
+For some of those plots the `apexcharts-card` was used which you can integrate via HACS.
+
+As the HA energy dashboard does not (yet) offer support for something like pellet consumption, since it does not support weight metrics like g/kg etc. we can use a `Utility Meter` for that purpose. The pellet consumption plot uses the modbus entity `modbus_pe1_pellet_consumption_kg` in combination with a Utility Meter which can be setup in the Helpers section of HA. The Utility meter enables us to display only the delta of consumption for each day, since the original modbus_pe1_pellet_consumption_kg entity is a total increasing count.
+
+### System Status
+HA offers the `picture-elements` lovelance card, which we can use to display custom images, entity state labels, icons and more. Using draw.io or even the Microsoft Word, we can draw shapes representing our heating system components and overlay some of our entities to achieve something like shown below.
+
+![](img/pe1_system.gif?raw=true)
+
+The picture-element configuration for this visualization can be found in `/visualization/system_status.yaml`.
+
+The corresponding images used for this visualization can be found in the /img directory.
+
+If you want to achieve this exact visualization, some additional template sensors are needed that can be found in the `/template.yaml`.
+

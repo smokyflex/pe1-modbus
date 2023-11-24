@@ -1,0 +1,46 @@
+type: custom:apexcharts-card
+header:
+  show: true
+  title: Buffer Temperature
+  show_states: true
+  colorize_states: true
+graph_span: 24hrs
+all_series_config:
+  type: area
+  opacity: 0.1
+  stroke_width: 1
+series:
+  - entity: sensor.modbus_pe1_buffer_temperature_top
+    name: Top
+    color: red
+    group_by:
+      func: avg
+      duration: 5min
+    yaxis_id: degrees
+  - entity: sensor.modbus_pe1_buffer_temperature_bottom
+    name: Bottom
+    color: orange
+    group_by:
+      func: avg
+      duration: 5min
+    yaxis_id: degrees
+  - entity: sensor.modbus_pe1_buffer_pump_control
+    name: Pump Control
+    type: line
+    curve: stepline
+    group_by:
+      func: max
+      duration: 10min
+    stroke_width: 1
+    color: green
+    opacity: 1
+    yaxis_id: state
+yaxis:
+  - id: state
+    show: false
+    opposite: true
+  - id: degrees
+    show: true
+apex_config:
+  grid:
+    show: false

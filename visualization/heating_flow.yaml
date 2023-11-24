@@ -1,0 +1,64 @@
+type: custom:apexcharts-card
+experimental:
+  color_threshold: true
+header:
+  show: true
+  title: Heating Flow
+  show_states: true
+  colorize_states: true
+graph_span: 24hrs
+series:
+  - entity: sensor.modbus_pe1_flow_temperature_actual
+    name: Flow Actual
+    group_by:
+      func: avg
+      duration: 5min
+    color: orange
+    stroke_width: 0
+    opacity: 0.3
+    type: area
+  - entity: sensor.modbus_pe1_flow_temperature_target
+    name: Flow Target
+    color: green
+    group_by:
+      func: avg
+      duration: 5min
+    stroke_width: 2
+    opacity: 1
+  - entity: sensor.modbus_pe1_outside_temperature
+    name: Outside
+    color: steelblue
+    group_by:
+      func: avg
+      duration: 5min
+    stroke_width: 1
+    opacity: 1
+  - entity: sensor.sonoff_sensor_temperature
+    name: Foyer
+    color: violet
+    group_by:
+      func: avg
+      duration: 5min
+    stroke_width: 1
+    opacity: 1
+  - entity: sensor.sonoff_hygroscope_lr_temperature
+    name: Living Room
+    color: pink
+    group_by:
+      func: avg
+      duration: 5min
+    stroke_width: 1
+    opacity: 1
+  - entity: sensor.sonoff_hygroscope_gr_temperature
+    name: Guest Room
+    color: indianred
+    group_by:
+      func: avg
+      duration: 5min
+    stroke_width: 1
+    opacity: 1
+apex_config:
+  grid:
+    show: false
+  legend:
+    show: false

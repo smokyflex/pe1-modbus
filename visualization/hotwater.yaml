@@ -1,0 +1,46 @@
+type: custom:apexcharts-card
+header:
+  show: true
+  title: Hot Water
+  show_states: true
+  colorize_states: true
+graph_span: 24hrs
+series:
+  - entity: sensor.modbus_pe1_hotwater_temperature_top
+    name: Temperature
+    type: area
+    group_by:
+      func: avg
+      duration: 10min
+    color: orange
+    stroke_width: 0
+    opacity: 0.5
+    yaxis_id: degrees
+  - entity: sensor.modbus_pe1_water_boiler_pump_control
+    name: Pump Control
+    type: area
+    curve: stepline
+    stroke_width: 1
+    color: green
+    opacity: 0.5
+    yaxis_id: state
+  - entity: switch.smart_switch_23022396705558510d0248e1e9bb85e5_outlet
+    name: E-Patrone
+    transform: 'return x == ''on'' ? 100: 0;'
+    type: area
+    curve: stepline
+    stroke_width: 0
+    color: red
+    opacity: 0.5
+    yaxis_id: state
+yaxis:
+  - id: state
+    show: false
+    opposite: true
+  - id: degrees
+    show: true
+    min: 33
+    max: 67
+apex_config:
+  grid:
+    show: false

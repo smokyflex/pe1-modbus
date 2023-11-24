@@ -1,0 +1,347 @@
+type: picture-elements
+image: /local/empty.png
+style: |
+  ha-card {
+    {% if is_state('sensor.buffer_pump_status','on') %}
+      --state-animation-1: rotation 2s linear infinite;
+      --state-color-1: steelblue;
+    {% else %}
+      --state-color-1: grey;
+    {% endif %}
+
+    {% if is_state('sensor.boiler_pump_status','on') %}
+      --state-animation-2: rotation 2s linear infinite;
+      --state-color-2: steelblue;
+    {% else %}
+      --state-color-2: grey;
+    {% endif %}
+
+    {% if states('sensor.modbus_pe1_furnace_status') in ['Heating', 'Heating up', 'Pre-heating', 'Ignition', 'Preparation'] %}
+      --state-animation-3: blink 2s linear infinite;
+      --state-color-3: red;
+    {% else %}
+      --state-color-3: grey;
+    {% endif %}
+
+    {% if is_state('switch.smart_switch_23022396705558510d0248e1e9bb85e5_outlet', 'on')%}
+      --state-animation-4: blink 2s linear infinite;
+    {% endif %}
+
+    {% if is_state('sensor.visualization_is_radiator_cold','true') %}
+      --state-color-radiator: grey;
+    {% elif is_state('sensor.visualization_is_radiator_warm','true') %}
+      --state-color-radiator: orange;
+    {% elif is_state('sensor.visualization_is_radiator_hot','true') %}
+      --state-color-radiator: orangered;
+    {% endif %}
+
+  }
+
+  @keyframes rotation {
+      0% {transform: translate(-50%, -50%) scale(0.8,0.8) rotate(0deg)}
+      100% {transform: translate(-50%, -50%) scale(0.8,0.8) rotate(360deg)}
+    }
+
+    
+  @keyframes blink {
+    0% {opacity: 1;} 
+    25% {opacity: 0.6;}              
+    50% {opacity: 0.2;}   
+    75% {opacity: 0.6;}   
+    100% {opacity: 1;}   
+  } 
+elements:
+  - type: image
+    image: /local/pe1_schematic.png
+    style:
+      top: 70%
+      left: 20%
+      width: 30%
+  - type: image
+    image: /local/boiler.png
+    style:
+      top: 75%
+      left: 85%
+      width: 20%
+  - type: image
+    entity: switch.smart_switch_23022396705558510d0248e1e9bb85e5_outlet
+    style:
+      top: 78%
+      left: 89%
+      width: 20%
+    state_image:
+      'on': /local/e-p-hot.png
+      'off': /local/e-pat-off.png
+  - type: conditional
+    conditions:
+      - entity: sensor.visualization_is_buffer_cold
+        state: 'true'
+    elements:
+      - type: image
+        image: /local/buffer_c.png
+        style:
+          top: 55%
+          left: 55%
+          width: 30%
+  - type: conditional
+    conditions:
+      - entity: sensor.visualization_is_buffer_cold_warm
+        state: 'true'
+    elements:
+      - type: image
+        image: /local/buffer_cw.png
+        style:
+          top: 55%
+          left: 55%
+          width: 30%
+  - type: conditional
+    conditions:
+      - entity: sensor.visualization_is_buffer_cold_hot
+        state: 'true'
+    elements:
+      - type: image
+        image: /local/buffer_ch.png
+        style:
+          top: 55%
+          left: 55%
+          width: 30%
+  - type: conditional
+    conditions:
+      - entity: sensor.visualization_is_buffer_warm_cold
+        state: 'true'
+    elements:
+      - type: image
+        image: /local/buffer_wc.png
+        style:
+          top: 55%
+          left: 55%
+          width: 30%
+  - type: conditional
+    conditions:
+      - entity: sensor.visualization_is_buffer_warm
+        state: 'true'
+    elements:
+      - type: image
+        image: /local/buffer_w.png
+        style:
+          top: 55%
+          left: 55%
+          width: 30%
+  - type: conditional
+    conditions:
+      - entity: sensor.visualization_is_buffer_warm_hot
+        state: 'true'
+    elements:
+      - type: image
+        image: /local/buffer_wh.png
+        style:
+          top: 55%
+          left: 55%
+          width: 30%
+  - type: conditional
+    conditions:
+      - entity: sensor.visualization_is_buffer_hot_warm
+        state: 'true'
+    elements:
+      - type: image
+        image: /local/buffer_hw.png
+        style:
+          top: 55%
+          left: 55%
+          width: 30%
+  - type: conditional
+    conditions:
+      - entity: sensor.visualization_is_buffer_hot
+        state: 'true'
+    elements:
+      - type: image
+        image: /local/buffer_h.png
+        style:
+          top: 55%
+          left: 55%
+          width: 30%
+  - type: conditional
+    conditions:
+      - entity: sensor.visualization_is_radiator_cold
+        state: 'true'
+    elements:
+      - type: image
+        image: /local/rad_off.png
+        style:
+          top: 23%
+          left: 19%
+          width: 25%
+  - type: conditional
+    conditions:
+      - entity: sensor.visualization_is_radiator_warm
+        state: 'true'
+    elements:
+      - type: image
+        image: /local/rad_warm_10.gif
+        style:
+          top: 23%
+          left: 19%
+          width: 25%
+  - type: conditional
+    conditions:
+      - entity: sensor.visualization_is_radiator_hot
+        state: 'true'
+    elements:
+      - type: image
+        image: /local/rad_hot_10.gif
+        style:
+          top: 23%
+          left: 19%
+          width: 25%
+  - type: state-icon
+    entity: sensor.modbus_pe1_system_status
+    style:
+      top: 92%
+      left: 10%
+      '--paper-item-icon-color': white
+      transform: translate(-50%,-50%) scale(0.8,0.8)
+  - type: state-icon
+    entity: sensor.modbus_pe1_heating_mode
+    style:
+      top: 92%
+      left: 16.5%
+      '--paper-item-icon-color': white
+      transform: translate(-50%,-50%) scale(0.8,0.8)
+  - type: state-icon
+    entity: input_select.heating_mode_select
+    style:
+      top: 92%
+      left: 16.5%
+      '--paper-item-icon-color': white
+      transform: translate(-50%,-50%) scale(0.8,0.8)
+      opacity: 0
+  - type: state-icon
+    entity: sensor.modbus_pe1_furnace_status
+    style:
+      top: 57%
+      left: 23.3%
+      '--paper-item-icon-color': var(--state-color-3)
+      animation: var(--state-animation-3)
+      transform: translate(-50%,-50%) scale(0.8,0.8)
+  - type: conditional
+    conditions:
+      - entity: sensor.visualization_is_heating_active
+        state: 'true'
+    elements:
+      - type: icon
+        entity: sensor.modbus_pe1_flow_temperature_target
+        icon: mdi:heat-wave
+        style:
+          top: 67%
+          left: 23.3%
+          color: red
+          opacity: 1
+          transform: translate(-50%,-50%) scale(0.8,0.8)
+  - type: conditional
+    conditions:
+      - entity: sensor.visualization_is_heating_active
+        state: 'false'
+    elements:
+      - type: icon
+        entity: sensor.modbus_pe1_flow_temperature_target
+        icon: mdi:heat-wave
+        style:
+          top: 67%
+          left: 23.3%
+          color: grey
+          opacity: 1
+          transform: translate(-50%,-50%) scale(0.8,0.8)
+  - type: state-icon
+    entity: sensor.modbus_pe1_pellet_fill_level
+    style:
+      top: 92%
+      left: 23.3%
+      transform: translate(-50%,-50%) scale(0.8,0.8)
+  - type: conditional
+    conditions:
+      - entity: switch.smart_switch_23022396705558510d0248e1e9bb85e5_outlet
+        state: 'off'
+    elements:
+      - type: state-icon
+        entity: switch.smart_switch_23022396705558510d0248e1e9bb85e5_outlet
+        style:
+          top: 78%
+          left: 96%
+          '--paper-item-icon-color': lightgrey
+          transform: translate(-50%, -50%) scale(0.6, 0.6)
+  - type: conditional
+    conditions:
+      - entity: switch.smart_switch_23022396705558510d0248e1e9bb85e5_outlet
+        state: 'on'
+    elements:
+      - type: state-icon
+        entity: switch.smart_switch_23022396705558510d0248e1e9bb85e5_outlet
+        style:
+          top: 78%
+          left: 96%
+          transform: translate(-50%, -50%) scale(0.6, 0.6)
+          animation: var(--state-animation-4)
+  - type: state-icon
+    entity: sensor.modbus_pe1_buffer_charge
+    style:
+      top: 27%
+      left: 64%
+      transform: translate(-50%,-50%) scale(0.8,0.8)
+  - type: state-icon
+    entity: sensor.buffer_pump_status
+    style:
+      top: 27%
+      left: 47%
+      '--paper-item-icon-color': var(--state-color-1)
+      animation: var(--state-animation-1)
+      transform: translate(-50%,-50%) scale(0.8,0.8)
+  - type: state-icon
+    entity: sensor.boiler_pump_status
+    style:
+      top: 85%
+      left: 79%
+      '--paper-item-icon-color': var(--state-color-2)
+      animation: var(--state-animation-2)
+      transform: translate(-50%,-50%) scale(0.8,0.8)
+  - type: state-label
+    entity: sensor.modbus_pe1_buffer_temperature_top
+    style:
+      top: 42%
+      left: 55%
+      opacity: 0
+  - type: state-label
+    entity: sensor.modbus_pe1_buffer_temperature_bottom
+    style:
+      top: 75%
+      left: 55%
+      opacity: 0
+  - type: state-label
+    entity: sensor.modbus_pe1_flow_temperature_actual
+    style:
+      top: 22%
+      left: 20%
+      opacity: 0
+  - type: custom:hui-element
+    card_type: gauge
+    name: ''
+    needle: true
+    min: 0
+    max: 70
+    segments:
+      - from: 0
+        color: steelblue
+      - from: 30
+        color: orange
+      - from: 40
+        color: orangered
+      - from: 55
+        color: red
+    entity: sensor.modbus_pe1_hotwater_temperature_top
+    style:
+      '--ha-card-background': rgba(1,1,1,0)
+      '--ha-card-border-width': 0
+      '--primary-text-color': black
+      border: none
+      top: 68%
+      left: 85%
+      width: 20%

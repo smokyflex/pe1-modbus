@@ -1,0 +1,10 @@
+chart_type: bar
+period: day
+type: statistics-graph
+entities:
+  - sensor.pellets_consumption_daily
+stat_types:
+  - change
+days_to_show: 365
+title: Pellets Consumption [kg]
+hide_legend: true

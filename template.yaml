@@ -165,3 +165,129 @@
     {% else %}
       mdi:alert-circle
     {% endif %}
+
+  - name: Visualization Is Heating Active
+    unique_id: "visualization_heating_active"
+    state: >
+        {% if states('sensor.modbus_pe1_flow_temperature_target') | int > 0%}
+          true
+        {% else %}
+          false
+        {% endif %}
+
+  - name: Visualization Is Buffer Cold
+    unique_id: "visualization_buffer_cold"
+    state: >
+        {% if states('sensor.modbus_pe1_buffer_temperature_bottom') | int < 30 and states('sensor.modbus_pe1_buffer_temperature_top') | int < 30%}
+          true
+        {% else %}
+          false
+        {% endif %}
+  - name: Visualization Is Buffer Cold Warm
+    unique_id: "visualization_buffer_cold_warm"
+    state: >
+        {% if states('sensor.modbus_pe1_buffer_temperature_bottom') | int < 30 and states('sensor.modbus_pe1_buffer_temperature_top') | int >= 30 and states('sensor.modbus_pe1_buffer_temperature_top') | int < 50%}
+          true
+        {% else %}
+          false
+        {% endif %}
+  - name: Visualization Is Buffer Cold Hot
+    unique_id: "visualization_buffer_cold_hot"
+    state: >
+        {% if states('sensor.modbus_pe1_buffer_temperature_bottom') | int < 30 and states('sensor.modbus_pe1_buffer_temperature_top') | int >= 50%}
+          true
+        {% else %}
+          false
+        {% endif %}
+  - name: Visualization Is Buffer Warm Cold
+    unique_id: "visualization_buffer_warm_cold"
+    state: >
+        {% if states('sensor.modbus_pe1_buffer_temperature_bottom') | int >= 30 and states('sensor.modbus_pe1_buffer_temperature_bottom') | int < 50 and states('sensor.modbus_pe1_buffer_temperature_top') | int < 30%}
+          true
+        {% else %}
+          false
+        {% endif %}
+  - name: Visualization Is Buffer Warm
+    unique_id: "visualization_buffer_warm"
+    state: >
+        {% if states('sensor.modbus_pe1_buffer_temperature_bottom') | int >= 30 and states('sensor.modbus_pe1_buffer_temperature_bottom') | int < 50 and states('sensor.modbus_pe1_buffer_temperature_top') | int >= 30 and states('sensor.modbus_pe1_buffer_temperature_top') | int < 50%}
+          true
+        {% else %}
+          false
+        {% endif %}
+  - name: Visualization Is Buffer Warm Hot
+    unique_id: "visualization_buffer_warm_hot"
+    state: >
+        {% if states('sensor.modbus_pe1_buffer_temperature_bottom') | int >= 30 and states('sensor.modbus_pe1_buffer_temperature_bottom') | int < 50 and states('sensor.modbus_pe1_buffer_temperature_top') | int >= 50%}
+          true
+        {% else %}
+          false
+        {% endif %}
+  - name: Visualization Is Buffer Hot Warm
+    unique_id: "visualization_buffer_hot_warm"
+    state: >
+        {% if states('sensor.modbus_pe1_buffer_temperature_top') | int >= 30 and states('sensor.modbus_pe1_buffer_temperature_top') | int < 50 and states('sensor.modbus_pe1_buffer_temperature_bottom') | int >= 50%}
+          true
+        {% else %}
+          false
+        {% endif %}
+  - name: Visualization Is Buffer Hot
+    unique_id: "visualization_buffer_hot"
+    state: >
+        {% if states('sensor.modbus_pe1_buffer_temperature_bottom') | int >= 50 and states('sensor.modbus_pe1_buffer_temperature_top') | int >= 50 %}
+          true
+        {% else %}
+          false
+        {% endif %}
+  - name: Visualization Is Radiator Cold
+    unique_id: "visualization_radiator_cold"
+    state: >
+        {% if states('sensor.modbus_pe1_flow_temperature_actual') | int < 30%}
+          true
+        {% else %}
+          false
+        {% endif %}
+  - name: Visualization Is Radiator Warm
+    unique_id: "visualization_radiator_warm"
+    state: >
+        {% if states('sensor.modbus_pe1_flow_temperature_actual') | int >= 30 and states('sensor.modbus_pe1_flow_temperature_actual') | int < 40%}
+          true
+        {% else %}
+          false
+        {% endif %}
+  - name: Visualization Is Radiator Hot
+    unique_id: "visualization_radiator_hot"
+    state: >
+        {% if states('sensor.modbus_pe1_flow_temperature_actual') | int >= 40%}
+          true
+        {% else %}
+          false
+        {% endif %}
+  - name: Buffer Pump Status
+    unique_id: "visualization_buffer_pump_status"
+    state: >
+      {% if states('sensor.modbus_pe1_buffer_pump_control') | float(0) > 0%}
+        on
+      {% else %}
+        off
+      {% endif %}
+    icon: >
+      {% if this.state == 'on' %}
+        mdi:pump
+      {% else %}
+        mdi:pump-off
+      {% endif %}
+  - name: Boiler Pump Status
+    unique_id: "visualization_water_boiler_pump_status"
+    state: >
+      {% if states('sensor.modbus_pe1_water_boiler_pump_control') | float(0) > 0%}
+        on
+      {% else %}
+        off
+      {% endif %}
+    icon: >
+      {% if this.state == 'on' %}
+        mdi:pump
+      {% else %}
+        mdi:pump-off
+      {% endif %}
